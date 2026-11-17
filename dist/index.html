@@ -158,19 +158,26 @@
         </div>
 
         <div class="product-stage reveal" data-product-stage>
-          <div class="product-copy">
-            <p class="eyebrow light">Drone Mission Ops</p>
-            <h2>A repeatable workflow. A clearer operating picture. <em>Informed action.</em></h2>
-            <div class="product-tabs" role="tablist" aria-label="Product workflow">
-              <button role="tab" aria-selected="true" data-product="0">Drone ready</button>
-              <button role="tab" aria-selected="false" data-product="1">Pre-flight checks</button>
-              <button role="tab" aria-selected="false" data-product="2">Health checks</button>
-              <button role="tab" aria-selected="false" data-product="3">Live capture</button>
-              <button role="tab" aria-selected="false" data-product="4">Sites and docks</button>
+          <header class="product-head">
+            <div><p class="eyebrow light">Drone Mission Ops</p><span class="product-status"><i></i> Mission workflow</span></div>
+            <h2>A repeatable workflow for <em>every flight.</em></h2>
+            <p>Move from mission readiness to live capture through one connected operational view.</p>
+          </header>
+          <div class="product-experience">
+            <div class="product-tabs" role="tablist" aria-label="Drone Mission Ops workflow">
+              <button class="is-active" role="tab" aria-selected="true" data-product="0"><span>01</span><span><strong>Drone ready</strong><small>Sites and docks at a glance</small></span><i aria-hidden="true">↗</i></button>
+              <button role="tab" aria-selected="false" data-product="1"><span>02</span><span><strong>Pre-flight checks</strong><small>Confirm mission settings</small></span><i aria-hidden="true">↗</i></button>
+              <button role="tab" aria-selected="false" data-product="2"><span>03</span><span><strong>Health checks</strong><small>Review operating state</small></span><i aria-hidden="true">↗</i></button>
+              <button role="tab" aria-selected="false" data-product="3"><span>04</span><span><strong>Live capture</strong><small>Maintain a live site view</small></span><i aria-hidden="true">↗</i></button>
+              <button role="tab" aria-selected="false" data-product="4"><span>05</span><span><strong>Unified planning</strong><small>Plan, track and verify</small></span><i aria-hidden="true">↗</i></button>
             </div>
-            <p class="product-count"><span data-current>01</span> / 05</p>
+            <figure class="product-visual restart-progress">
+              <div class="product-window-bar"><span><i></i><i></i><i></i></span><small>Mission workspace</small><b>Live</b></div>
+              <div class="product-screen"><img data-product-image src="assets/product/drone-ready.webp" alt="Drone Mission Ops home showing sites and docked drones, with a drone controller beside the laptop" loading="lazy"><span class="product-scan" aria-hidden="true"></span></div>
+              <figcaption><span class="product-count"><b data-current>01</b> / 05</span><span data-product-caption>Sites and docked drones are ready for a repeatable mission workflow.</span></figcaption>
+              <div class="product-progress" aria-hidden="true"><span data-product-progress></span></div>
+            </figure>
           </div>
-          <figure class="product-visual"><img data-product-image src="assets/product/drone-ready.webp" alt="Drone Mission Ops home showing sites and docked drones, with a drone controller beside the laptop" loading="lazy"><figcaption data-product-caption>Sites and docked drones are ready for a repeatable mission workflow.</figcaption></figure>
         </div>
       </div>
     </section>

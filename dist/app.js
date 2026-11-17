@@ -62,7 +62,23 @@ const products=[
   {image:'assets/product/unified-planning.webp',alt:'Live mission tracking, terrain-aware planning, elevation and airspace checks, and data checks',caption:'Planning, live mission tracking and data checks come together in one workflow.'}
 ];
 const productStage=qs('[data-product-stage]');
-qsa('[data-product]').forEach(button=>button.addEventListener('click',()=>{const i=Number(button.dataset.product);qsa('[data-product]').forEach(b=>b.setAttribute('aria-selected',String(b===button)));const figure=qs('.product-visual',productStage);figure.classList.add('is-switching');setTimeout(()=>{const p=products[i],img=qs('[data-product-image]');img.src=p.image;img.alt=p.alt;qs('[data-product-caption]').textContent=p.caption;qs('[data-current]').textContent=String(i+1).padStart(2,'0');figure.classList.remove('is-switching')},180)}));
+const productButtons=qsa('[data-product]'),productFigure=qs('.product-visual',productStage);
+let productIndex=0,productTimer,productSwap;
+function selectProduct(index,userInitiated=false){
+  productIndex=index;
+  productButtons.forEach((button,i)=>{button.classList.toggle('is-active',i===index);button.setAttribute('aria-selected',String(i===index))});
+  productFigure.classList.add('is-switching');
+  clearTimeout(productSwap);
+  productSwap=setTimeout(()=>{const p=products[index],img=qs('[data-product-image]');img.src=p.image;img.alt=p.alt;qs('[data-product-caption]').textContent=p.caption;qs('[data-current]').textContent=String(index+1).padStart(2,'0');productFigure.classList.remove('is-switching');productFigure.classList.remove('restart-progress');void productFigure.offsetWidth;productFigure.classList.add('restart-progress')},180);
+  if(userInitiated)startProductStory();
+}
+function startProductStory(){clearInterval(productTimer);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)productTimer=setInterval(()=>selectProduct((productIndex+1)%products.length),5200)}
+productButtons.forEach(button=>button.addEventListener('click',()=>selectProduct(Number(button.dataset.product),true)));
+productStage.addEventListener('pointerenter',()=>clearInterval(productTimer));
+productStage.addEventListener('pointerleave',startProductStory);
+productStage.addEventListener('focusin',()=>clearInterval(productTimer));
+productStage.addEventListener('focusout',event=>{if(!productStage.contains(event.relatedTarget))startProductStory()});
+startProductStory();
 
 // Industry explorer. Copy is preserved from the source site.
 const industries={
