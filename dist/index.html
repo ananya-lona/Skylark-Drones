@@ -10,7 +10,7 @@
   <meta property="og:description" content="Autonomous aerial intelligence for enterprises that build at scale.">
   <meta property="og:type" content="website">
   <link rel="icon" href="assets/brand/bird.svg">
-  <link rel="preload" href="assets/video/hero.webp" as="image" type="image/webp">
+  <link rel="preload" href="assets/hero/solar-intelligence.jpg" as="image" type="image/jpeg">
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
@@ -34,18 +34,27 @@
 
   <main id="main">
     <section class="hero" id="hero" aria-labelledby="hero-title">
-      <video class="hero-media" autoplay muted loop playsinline preload="auto" poster="assets/video/hero.webp" aria-label="Aerial footage of an open-cast mine, an expressway under construction and a solar park being built">
-        <source src="assets/video/hero-1080.mp4" type="video/mp4" media="(min-width: 768px)">
-        <source src="assets/video/hero-portrait.mp4" type="video/mp4">
-      </video>
+      <div class="hero-scenes" data-hero-scenes aria-hidden="true">
+        <figure class="hero-scene is-active" data-hero-scene><img src="assets/hero/solar-intelligence.jpg" alt="" fetchpriority="high"></figure>
+        <figure class="hero-scene" data-hero-scene><img src="assets/hero/earthworks-intelligence.jpg" alt="" loading="lazy"></figure>
+        <figure class="hero-scene" data-hero-scene><img src="assets/hero/corridor-intelligence.jpg" alt="" loading="lazy"></figure>
+      </div>
       <div class="hero-shade"></div>
       <div class="hero-grid shell">
         <div class="hero-content">
           <p class="eyebrow light reveal">Physical world intelligence, delivered</p>
-          <h1 id="hero-title" class="reveal">Autonomous Aerial Intelligence for Enterprises that Build at Scale.</h1>
+          <h1 id="hero-title" class="reveal">See every site.<br>Act with clarity.</h1>
           <div class="hero-action reveal">
-            <p>Turn recurring drone capture into a reliable operating picture for large, complex assets.</p>
+            <p>Autonomous aerial intelligence for enterprises building and operating at scale.</p>
             <button class="button button-accent" data-open-dialog>Book a demo <span aria-hidden="true">↗</span></button>
+          </div>
+        </div>
+        <div class="hero-sequence reveal" aria-label="Aerial intelligence scenes">
+          <p aria-live="polite"><span data-hero-current>01</span> <span data-hero-label>Solar infrastructure</span></p>
+          <div class="hero-sequence-controls" role="group" aria-label="Choose hero scene">
+            <button class="is-active" type="button" data-hero-select="0" aria-label="Show solar infrastructure" aria-pressed="true"><span></span></button>
+            <button type="button" data-hero-select="1" aria-label="Show industrial earthworks" aria-pressed="false"><span></span></button>
+            <button type="button" data-hero-select="2" aria-label="Show transport corridor" aria-pressed="false"><span></span></button>
           </div>
         </div>
       </div>
