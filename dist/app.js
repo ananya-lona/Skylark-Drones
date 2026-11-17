@@ -37,6 +37,7 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
       card.style.setProperty('--ry','0deg');
     });
   });
+  qsa('.quote').forEach(card=>card.addEventListener('pointermove',event=>{const bounds=card.getBoundingClientRect();card.style.setProperty('--qx',`${event.clientX-bounds.left}px`);card.style.setProperty('--qy',`${event.clientY-bounds.top}px`)}));
 }
 
 // Product story
