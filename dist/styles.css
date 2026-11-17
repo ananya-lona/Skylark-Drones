@@ -126,3 +126,6 @@ footer{background:#0b1220}
 /* Compact navigation CTA */
 .header-cta{min-height:36px;gap:10px;padding:9px 13px;font-size:.76rem;line-height:1;letter-spacing:.01em}.header-cta span{font-size:.95em}
 @media(max-width:720px){.header-cta{min-height:34px;padding:8px 11px;font-size:.72rem}}
+
+/* Keep Card 05 centered beneath the hub when tilt is active */
+@media(min-width:901px){.clarity-node.node-safety{transform:translateX(-50%) perspective(900px) rotateX(var(--rx)) rotateY(var(--ry))}.clarity-diagram.is-visible .clarity-node.node-safety:is(:hover,:focus-visible){transform:translateX(-50%) perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) scale(1.015)}}
