@@ -34,7 +34,10 @@
 
   <main id="main">
     <section class="hero" id="hero" aria-labelledby="hero-title">
-      <img class="hero-media" src="assets/video/hero.webp" alt="Aerial view of a large industrial site" width="1920" height="1080">
+      <video class="hero-media" autoplay muted loop playsinline preload="auto" poster="assets/video/hero.webp" aria-label="Aerial footage of an open-cast mine, an expressway under construction and a solar park being built">
+        <source src="assets/video/hero-1080.mp4" type="video/mp4" media="(min-width: 768px)">
+        <source src="assets/video/hero-portrait.mp4" type="video/mp4">
+      </video>
       <div class="hero-shade"></div>
       <div class="hero-grid shell">
         <p class="eyebrow light reveal">Physical world intelligence, delivered</p>

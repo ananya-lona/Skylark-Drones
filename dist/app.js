@@ -1,5 +1,9 @@
 const qs=(s,c=document)=>c.querySelector(s), qsa=(s,c=document)=>[...c.querySelectorAll(s)];
 
+// Keep the cinematic hero for most visitors, but respect reduced-motion preferences.
+const heroVideo=qs('video.hero-media');
+if(heroVideo&&matchMedia('(prefers-reduced-motion: reduce)').matches){heroVideo.pause();heroVideo.removeAttribute('autoplay')}
+
 // Header and mobile navigation
 const header=qs('[data-header]'); let previousY=0;
 addEventListener('scroll',()=>{const y=scrollY;header.classList.toggle('is-hidden',y>previousY&&y>160);previousY=y},{passive:true});
