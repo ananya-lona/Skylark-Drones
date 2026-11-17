@@ -33,6 +33,26 @@ qsa('.mobile-menu a').forEach(a=>a.addEventListener('click',()=>{mobileMenu.hidd
 const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -40px'});
 qsa('.reveal').forEach((el,i)=>{el.style.transitionDelay=`${Math.min(i%5,4)*55}ms`;observer.observe(el)});
 
+// Uiverse-inspired card depth: a restrained pointer spotlight and subtle tilt.
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  qsa('.clarity-node').forEach(card=>{
+    card.addEventListener('pointermove',event=>{
+      const bounds=card.getBoundingClientRect();
+      const x=event.clientX-bounds.left,y=event.clientY-bounds.top;
+      const rotateX=((y/bounds.height)-.5)*-3.5;
+      const rotateY=((x/bounds.width)-.5)*4.5;
+      card.style.setProperty('--mx',`${x}px`);
+      card.style.setProperty('--my',`${y}px`);
+      card.style.setProperty('--rx',`${rotateX}deg`);
+      card.style.setProperty('--ry',`${rotateY}deg`);
+    });
+    card.addEventListener('pointerleave',()=>{
+      card.style.setProperty('--rx','0deg');
+      card.style.setProperty('--ry','0deg');
+    });
+  });
+}
+
 // Product story
 const products=[
   {image:'assets/product/drone-ready.webp',alt:'Drone Mission Ops home showing sites and docked drones, with a drone controller beside the laptop',caption:'Sites and docked drones are ready for a repeatable mission workflow.'},
