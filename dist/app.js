@@ -16,7 +16,7 @@ function selectHeroScene(index,userInitiated=false){
 }
 function startHeroSequence(){
   clearInterval(heroTimer);
-  if(!reduceMotion.matches&&heroScenes.length>1)heroTimer=setInterval(()=>selectHeroScene((heroIndex+1)%heroScenes.length),5600);
+  if(!reduceMotion.matches&&heroScenes.length>1)heroTimer=setInterval(()=>selectHeroScene((heroIndex+1)%heroScenes.length),4000);
 }
 heroSelectors.forEach(button=>button.addEventListener('click',()=>selectHeroScene(Number(button.dataset.heroSelect),true)));
 reduceMotion.addEventListener?.('change',startHeroSequence);
