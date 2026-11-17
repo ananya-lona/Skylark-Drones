@@ -34,12 +34,17 @@
 
   <main id="main">
     <section class="hero" id="hero" aria-labelledby="hero-title">
-      <div class="hero-scenes" data-hero-scenes aria-hidden="true">
-        <figure class="hero-scene is-active" data-hero-scene><img src="assets/hero/solar-intelligence.jpg" alt="" fetchpriority="high"></figure>
-        <figure class="hero-scene" data-hero-scene><img src="assets/hero/earthworks-intelligence.jpg" alt="" loading="lazy"></figure>
-        <figure class="hero-scene" data-hero-scene><img src="assets/hero/corridor-intelligence.jpg" alt="" loading="lazy"></figure>
-      </div>
+      <video class="hero-video" data-hero-video autoplay muted loop playsinline preload="metadata" poster="assets/video/hero.webp" aria-hidden="true">
+        <source src="assets/video/hero-portrait.mp4" media="(max-width: 720px)" type="video/mp4">
+        <source src="assets/video/hero-1080.mp4" type="video/mp4">
+      </video>
       <div class="hero-shade"></div>
+      <div class="hero-drone-flight" aria-hidden="true">
+        <svg viewBox="0 0 92 38" focusable="false">
+          <g class="drone-rotors"><ellipse cx="18" cy="8" rx="17" ry="2"></ellipse><ellipse cx="74" cy="8" rx="17" ry="2"></ellipse></g>
+          <path d="M34 15h24l7 8-7 4H34l-7-4 7-8Z"></path><path d="m36 18-16-7m36 7 16-7M39 27l-6 7m20-7 6 7"></path><circle cx="46" cy="22" r="4"></circle>
+        </svg>
+      </div>
       <div class="hero-grid shell">
         <div class="hero-content">
           <p class="eyebrow light reveal">Physical world intelligence, delivered</p>
@@ -49,13 +54,9 @@
             <button class="button button-accent" data-open-dialog>Book a demo <span aria-hidden="true">↗</span></button>
           </div>
         </div>
-        <div class="hero-sequence reveal" aria-label="Aerial intelligence scenes">
-          <p aria-live="polite"><span data-hero-current>01</span> <span data-hero-label>Solar infrastructure</span></p>
-          <div class="hero-sequence-controls" role="group" aria-label="Choose hero scene">
-            <button class="is-active" type="button" data-hero-select="0" aria-label="Show solar infrastructure" aria-pressed="true"><span></span></button>
-            <button type="button" data-hero-select="1" aria-label="Show industrial earthworks" aria-pressed="false"><span></span></button>
-            <button type="button" data-hero-select="2" aria-label="Show transport corridor" aria-pressed="false"><span></span></button>
-          </div>
+        <div class="hero-sequence hero-live-status reveal" aria-label="Live aerial capture">
+          <p><span>Live</span><span>Aerial intelligence in motion</span></p>
+          <div class="hero-video-progress" aria-hidden="true"><span></span></div>
         </div>
       </div>
     </section>

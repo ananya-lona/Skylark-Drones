@@ -1,26 +1,12 @@
 const qs=(s,c=document)=>c.querySelector(s), qsa=(s,c=document)=>[...c.querySelectorAll(s)];
 
-// Original aerial hero sequence: calm depth motion, manual selection and reduced-motion support.
-const heroScenes=qsa('[data-hero-scene]'),heroSelectors=qsa('[data-hero-select]');
-const heroLabels=['Solar infrastructure','Industrial earthworks','Transport corridor'];
-let heroIndex=0,heroTimer;
+// Hero footage runs slightly faster while respecting reduced-motion preferences.
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
-function selectHeroScene(index,userInitiated=false){
-  heroIndex=index;
-  heroScenes.forEach((scene,i)=>scene.classList.toggle('is-active',i===index));
-  heroSelectors.forEach((button,i)=>{button.classList.toggle('is-active',i===index);button.setAttribute('aria-pressed',String(i===index))});
-  const current=qs('[data-hero-current]'),label=qs('[data-hero-label]');
-  if(current)current.textContent=String(index+1).padStart(2,'0');
-  if(label)label.textContent=heroLabels[index];
-  if(userInitiated)startHeroSequence();
-}
-function startHeroSequence(){
-  clearInterval(heroTimer);
-  if(!reduceMotion.matches&&heroScenes.length>1)heroTimer=setInterval(()=>selectHeroScene((heroIndex+1)%heroScenes.length),4000);
-}
-heroSelectors.forEach(button=>button.addEventListener('click',()=>selectHeroScene(Number(button.dataset.heroSelect),true)));
-reduceMotion.addEventListener?.('change',startHeroSequence);
-startHeroSequence();
+const heroVideo=qs('[data-hero-video]');
+function setHeroMotion(){if(!heroVideo)return;if(reduceMotion.matches){heroVideo.pause()}else{heroVideo.playbackRate=1.25;heroVideo.play().catch(()=>{})}}
+heroVideo?.addEventListener('loadedmetadata',setHeroMotion,{once:true});
+reduceMotion.addEventListener?.('change',setHeroMotion);
+setHeroMotion();
 
 // Header and mobile navigation
 const header=qs('[data-header]'); let previousY=0;
