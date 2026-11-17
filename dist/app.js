@@ -94,7 +94,9 @@ qsa('[data-industry]').forEach(button=>button.addEventListener('click',()=>{cons
 
 // Accessible demo dialog with local-only validation and transparent simulated feedback.
 const dialog=qs('.demo-dialog'),form=qs('#demo-form');
-qsa('[data-open-dialog]').forEach(b=>b.addEventListener('click',()=>dialog.showModal()));
+qsa('[data-open-dialog]').forEach(b=>b.addEventListener('click',()=>{dialog.showModal();requestAnimationFrame(()=>form.elements.name.focus())}));
 qs('[data-close-dialog]').addEventListener('click',()=>dialog.close());
 dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+dialog.addEventListener('close',()=>{qsa('.error',form).forEach(error=>error.textContent='');qs('.form-status',form).textContent=''});
+form.addEventListener('input',e=>{const error=e.target.parentElement?.querySelector('.error');if(error)error.textContent='';qs('.form-status',form).textContent=''});
 form.addEventListener('submit',e=>{e.preventDefault();let valid=true;qsa('[required]',form).forEach(field=>{const error=field.parentElement.querySelector('.error');if(!field.value.trim()){error.textContent='This field is required.';valid=false}else if(field.type==='email'&&!/^\S+@\S+\.\S+$/.test(field.value)){error.textContent='Enter a valid work email.';valid=false}else error.textContent=''});const status=qs('.form-status',form);if(valid){status.textContent='Demo request prepared. This preview does not send submissions.';form.querySelector('button').disabled=true;setTimeout(()=>{form.reset();form.querySelector('button').disabled=false},1800)}else status.textContent='Please review the highlighted fields.'});
