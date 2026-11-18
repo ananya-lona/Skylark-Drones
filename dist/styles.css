@@ -39,7 +39,7 @@ footer{background:#0b1220}
 .hero-grid{z-index:3;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:1fr auto;align-items:end;gap:54px;padding:154px 0 48px}
 .hero-content{align-self:center;width:min(100%,720px);padding-top:4vh}
 .hero h1{max-width:720px;font-size:clamp(3rem,5vw,5.8rem);line-height:.96;letter-spacing:-.058em;text-wrap:balance}
-.hero-action{display:grid;grid-template-columns:minmax(250px,360px) auto;align-items:center;gap:24px;max-width:620px;margin-top:32px}
+.hero-action{display:flex;flex-direction:column;align-items:flex-start;gap:20px;max-width:440px;margin-top:32px}
 .hero-action p{font-size:.98rem;line-height:1.55}
 .hero-action .button{white-space:nowrap}
 .hero-sequence{grid-column:2;grid-row:2;justify-self:end;width:260px;color:#fff}
