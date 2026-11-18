@@ -11,6 +11,8 @@
   <meta property="og:type" content="website">
   <link rel="icon" href="assets/brand/bird.svg">
   <link rel="preload" href="assets/video/hero.webp" as="image" type="image/webp">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
@@ -42,7 +44,7 @@
       <div class="hero-grid shell">
         <div class="hero-content">
           <p class="eyebrow light reveal">Physical world intelligence, delivered</p>
-          <h1 id="hero-title" class="reveal">See every site.<br>Act with clarity.</h1>
+          <h1 id="hero-title" class="reveal">See every site.<br><span class="tone-soft">Act with clarity.</span></h1>
           <div class="hero-action reveal">
             <p>Autonomous aerial intelligence for enterprises building and operating at scale.</p>
             <button class="button button-accent cta-button" type="button" data-open-dialog>Book a demo <span aria-hidden="true">↗</span></button>
@@ -69,8 +71,15 @@
     <section class="logo-cloud section-sm" aria-labelledby="trusted-title">
       <div class="shell">
         <p class="eyebrow" id="trusted-title">Trusted by teams managing critical infrastructure</p>
-        <div class="logos reveal">
+      </div>
+      <div class="logo-marquee reveal" tabindex="0" aria-label="Trusted client logos. Animation pauses while focused or hovered.">
+        <div class="logo-track">
+          <div class="logos">
           <img src="assets/clients/cleanmax.png" alt="CleanMax" loading="lazy"><img src="assets/clients/lt.png" alt="Larsen &amp; Toubro" loading="lazy"><img src="assets/clients/acciona.png" alt="Acciona Energy" loading="lazy"><img src="assets/clients/alstom.png" alt="Alstom" loading="lazy"><img src="assets/clients/bosch.png" alt="Bosch" loading="lazy"><img src="assets/clients/relianceinfra.png" alt="Reliance Infrastructure" loading="lazy"><img src="assets/clients/sbenergy.png" alt="SB Energy" loading="lazy"><img src="assets/clients/shapoorji.png" alt="Shapoorji Pallonji" loading="lazy"><img src="assets/clients/ultratech.png" alt="UltraTech Cement" loading="lazy">
+          </div>
+          <div class="logos" aria-hidden="true">
+            <img src="assets/clients/cleanmax.png" alt=""><img src="assets/clients/lt.png" alt=""><img src="assets/clients/acciona.png" alt=""><img src="assets/clients/alstom.png" alt=""><img src="assets/clients/bosch.png" alt=""><img src="assets/clients/relianceinfra.png" alt=""><img src="assets/clients/sbenergy.png" alt=""><img src="assets/clients/shapoorji.png" alt=""><img src="assets/clients/ultratech.png" alt="">
+          </div>
         </div>
       </div>
     </section>
@@ -78,7 +87,7 @@
     <section class="aerial-reel" aria-labelledby="aerial-title">
       <div class="shell aerial-heading reveal">
         <p class="eyebrow light">Across every asset</p>
-        <h2 id="aerial-title">Change, made visible.</h2>
+        <h2 id="aerial-title">Change, <span class="tone-soft">made visible.</span></h2>
         <p>Aerial intelligence brings progress, condition and change across complex assets into a view teams can act on.</p>
       </div>
       <div class="aerial-viewport reveal" tabindex="0" aria-label="Moving aerial views. Focus or hover to pause.">
@@ -107,110 +116,101 @@
       <div class="shell">
         <div class="clarity-intro reveal">
           <p class="eyebrow">Operational clarity</p>
-          <h2 id="problem-title">Most enterprises don’t lack drone data. <span>They lack visibility they can act on.</span></h2>
+          <h2 id="problem-title">Most enterprises don’t lack drone data. <span class="tone-soft">They lack visibility they can act on.</span></h2>
         </div>
-        <div class="clarity-diagram reveal" aria-label="Skylark connects drone data to five operational outcomes">
-          <svg class="clarity-lines" viewBox="0 0 1200 720" preserveAspectRatio="none" aria-hidden="true">
-            <path class="hub-path path-1" d="M600 356 C500 356 466 195 338 170"/>
-            <path class="hub-path path-2" d="M600 356 C700 356 734 195 862 170"/>
-            <path class="hub-path path-3" d="M600 356 C486 382 448 522 318 548"/>
-            <path class="hub-path path-4" d="M600 356 C714 382 752 522 882 548"/>
-            <path class="hub-path path-5" d="M600 356 C600 438 600 524 600 610"/>
-            <circle class="flow-dot dot-1" r="4"><animateMotion dur="4.8s" begin=".4s" repeatCount="indefinite" path="M600 356 C500 356 466 195 338 170"/></circle>
-            <circle class="flow-dot dot-2" r="4"><animateMotion dur="5.2s" begin="1.2s" repeatCount="indefinite" path="M600 356 C700 356 734 195 862 170"/></circle>
-            <circle class="flow-dot dot-3" r="4"><animateMotion dur="5.4s" begin="2s" repeatCount="indefinite" path="M600 356 C486 382 448 522 318 548"/></circle>
-            <circle class="flow-dot dot-4" r="4"><animateMotion dur="5s" begin="2.8s" repeatCount="indefinite" path="M600 356 C714 382 752 522 882 548"/></circle>
-            <circle class="flow-dot dot-5" r="4"><animateMotion dur="4.6s" begin="1.7s" repeatCount="indefinite" path="M600 356 C600 438 600 524 600 610"/></circle>
-          </svg>
-          <div class="clarity-hub" aria-hidden="true"><span class="hub-ring"></span><img src="assets/brand/bird.svg" alt=""><small>Skylark</small></div>
-          <article class="clarity-node node-speed" tabindex="0">
+        <div class="clarity-diagram outcome-rail reveal" aria-label="One Skylark workflow creates five operational outcomes">
+          <header class="outcome-rail-head">
+            <div class="outcome-rail-brand">
+              <span aria-hidden="true"><img src="assets/brand/bird.svg" alt=""></span>
+              <div><small>Skylark workflow</small><strong>One flight. Five operational outcomes.</strong></div>
+            </div>
+            <p aria-label="Capture, understand, act"><span>Capture</span><i>→</i><span>Understand</span><i>→</i><span>Act</span></p>
+          </header>
+          <div class="outcome-flightpath" aria-hidden="true">
+            <span class="outcome-flight-endpoint"><i></i> Flight captured</span>
+            <div class="outcome-flight-line">
+              <i><b>01</b></i><i><b>02</b></i><i><b>03</b></i><i><b>04</b></i><i><b>05</b></i>
+              <span class="outcome-flight-marker"><img src="assets/brand/bird.svg" alt=""></span>
+            </div>
+            <span class="outcome-flight-endpoint is-output"><i></i> Decision ready</span>
+          </div>
+          <div class="outcome-rail-grid">
+            <article class="clarity-node node-speed">
             <div class="clarity-node-top"><span class="clarity-node-label">01 · Speed</span><span class="clarity-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg></span></div>
             <h3>Get site insights sooner.</h3><p>Turn each flight into decision-ready intelligence.</p>
-          </article>
-          <article class="clarity-node node-efficiency" tabindex="0">
+            </article>
+            <article class="clarity-node node-efficiency">
             <div class="clarity-node-top"><span class="clarity-node-label">02 · Efficiency</span><span class="clarity-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 7h8M11 4l3 3-3 3M19 17h-8M13 14l-3 3 3 3"/><circle cx="5" cy="17" r="2"/><circle cx="19" cy="7" r="2"/></svg></span></div>
             <h3>Streamline capture and reporting.</h3><p>Connect repeatable missions to one clear workflow.</p>
-          </article>
-          <article class="clarity-node node-cost" tabindex="0">
+            </article>
+            <article class="clarity-node node-cost">
             <div class="clarity-node-top"><span class="clarity-node-label">03 · Cost</span><span class="clarity-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 17l4-4 3 2 6-7"/><path d="M14 8h4v4"/><path d="M4 20h16"/></svg></span></div>
             <h3>Spot deviations before they grow.</h3><p>Surface change early and reduce avoidable rework.</p>
-          </article>
-          <article class="clarity-node node-compliance" tabindex="0">
+            </article>
+            <article class="clarity-node node-compliance">
             <div class="clarity-node-top"><span class="clarity-node-label">04 · Compliance</span><span class="clarity-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3.5h7l3 3V20H7z"/><path d="M14 3.5V7h3M9.5 12h5M9.5 15.5h3.5"/></svg></span></div>
             <h3>Keep site records together for review.</h3><p>Maintain a traceable visual record across every site.</p>
-          </article>
-          <article class="clarity-node node-safety" tabindex="0">
+            </article>
+            <article class="clarity-node node-safety">
             <div class="clarity-node-top"><span class="clarity-node-label">05 · Safety</span><span class="clarity-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-2.8 7.7-7 10-4.2-2.3-7-5.4-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span></div>
             <h3>Inspect suitable areas remotely.</h3><p>Limit exposure while keeping teams informed.</p>
-          </article>
+            </article>
+          </div>
         </div>
         <div class="experience reveal">
           <div class="experience-intro">
-            <p class="eyebrow">Built for your site</p><h2>Backed by experience.</h2>
-            <p class="experience-lede">A connected approach from the first use case to repeatable operations.</p>
-            <span class="experience-signal"><i></i> Field-to-insight workflow</span>
+            <p class="eyebrow">Built for your site</p><h2>See the whole site. <span class="tone-soft">Move with clarity.</span></h2>
+            <p class="experience-lede">We connect site context, field capture and operational insight into one approach your team can scale.</p>
+            <div class="experience-route" aria-label="Site context to scaled operations"><span>Context</span><i>→</i><span>Capture</span><i>→</i><span>Insight</span><i>→</i><span>Scale</span></div>
           </div>
-          <ol class="experience-cards">
-            <li tabindex="0">
-              <header><span>01</span><small>Site context</small></header>
-              <div class="experience-visual visual-radar" aria-hidden="true"><span class="radar-ring"></span><span class="radar-sweep"></span><i></i><img src="assets/brand/bird.svg" alt=""></div>
-              <div><strong>We understand the problem</strong><p>Solutions shaped around the way your teams work.</p></div>
-            </li>
-            <li tabindex="0">
-              <header><span>02</span><small>Connected workflow</small></header>
-              <div class="experience-visual visual-flow" aria-hidden="true"><span>Capture</span><i></i><span>Insight</span><b></b></div>
-              <div><strong>We connect the workflow</strong><p>From drone capture to insights your teams can use.</p></div>
-            </li>
-            <li tabindex="0">
-              <header><span>03</span><small>Scale</small></header>
-              <div class="experience-visual visual-fleet" aria-hidden="true"><span><i></i><b></b><em></em></span><span><i></i><b></b><em></em></span><span><i></i><b></b><em></em></span></div>
-              <div><strong>Scale alongside your team</strong><p>We bring field experience and work with your teams to shape the right approach.</p></div>
-            </li>
-            <li tabindex="0">
-              <header><span>04</span><small>Deploy</small></header>
-              <div class="experience-visual visual-route" aria-hidden="true"><svg viewBox="0 0 260 90"><path d="M8 72 C64 72 56 18 112 24 S176 84 250 18"/><circle cx="8" cy="72" r="4"/><circle cx="250" cy="18" r="4"/><circle class="route-drone" r="5"><animateMotion dur="4.2s" repeatCount="indefinite" path="M8 72 C64 72 56 18 112 24 S176 84 250 18"/></circle></svg></div>
-              <div><strong>We build with you</strong><p>Test the use case, refine the solution and scale what works.</p></div>
-            </li>
-          </ol>
+          <div class="site-story">
+            <figure class="site-story-visual">
+              <img src="assets/aerial/mining-live.webp" alt="Active mine site seen from the air with haul roads and operating vehicles" loading="lazy">
+              <div class="site-story-shade" aria-hidden="true"></div>
+              <div class="site-story-status"><span><i></i> Site view active</span><b>01 / Field operations</b></div>
+              <svg class="site-story-route" viewBox="0 0 720 520" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M88 382 C150 300 196 340 248 248 S378 138 454 214 S574 318 642 146"/>
+                <circle cx="88" cy="382" r="8"/><circle cx="642" cy="146" r="8"/>
+                <circle class="site-story-drone" r="10"><animateMotion dur="6s" repeatCount="indefinite" path="M88 382 C150 300 196 340 248 248 S378 138 454 214 S574 318 642 146"/></circle>
+              </svg>
+              <div class="site-story-tag tag-capture"><span>01</span><strong>Capture zone</strong></div>
+              <div class="site-story-tag tag-change"><span>02</span><strong>Change detected</strong></div>
+              <div class="site-story-tag tag-action"><span>03</span><strong>Action ready</strong></div>
+              <figcaption><strong>One living view of the site</strong><span>Field evidence becomes shared operational context.</span></figcaption>
+            </figure>
+            <ol class="site-story-steps">
+              <li tabindex="0"><span>01</span><div><small>Site context</small><strong>Start with the reality on the ground.</strong><p>Define the site, constraints and decisions that matter.</p></div><i>↗</i></li>
+              <li tabindex="0"><span>02</span><div><small>Connected workflow</small><strong>Link capture to the people who need it.</strong><p>Move evidence from the field into one repeatable flow.</p></div><i>↗</i></li>
+              <li tabindex="0"><span>03</span><div><small>Prove &amp; refine</small><strong>Test the use case on a real site.</strong><p>Learn quickly, refine the approach and prove what works.</p></div><i>↗</i></li>
+              <li tabindex="0"><span>04</span><div><small>Scale</small><strong>Repeat with confidence.</strong><p>Extend a proven operating model across teams and sites.</p></div><i>↗</i></li>
+            </ol>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="section journey" id="platform" aria-labelledby="journey-title">
       <div class="shell">
-        <p class="eyebrow light reveal">How Skylark works</p>
-        <h2 id="journey-title" class="display light reveal">One connected journey from site capture to enterprise decisions.</h2>
-        <div class="journey-line reveal" role="list">
-          <article role="listitem"><span>01</span><small>Capture at the site</small><h3>SkyStation</h3><p>Scheduled or event-triggered drone capture through a stationed system, where deployment conditions permit.</p></article>
-          <article role="listitem"><span>02</span><small>Manage the mission</small><h3>Drone Mission Ops</h3><p>Plan missions, manage drone operations and oversee flight execution.</p></article>
-          <article role="listitem"><span>03</span><small>Understand the data</small><h3>Spectra</h3><p>Convert captured data into maps, measurements, change detection and actionable site insights.</p></article>
-          <article role="listitem"><span>04</span><small>Decide and coordinate</small><h3>Your team + Skylark</h3><p>Together, we tailor dashboards, reporting and ongoing support to your requirements and site scale, helping your team prioritise action.</p></article>
-        </div>
-
-        <div class="product-stage reveal" data-product-stage>
-          <header class="product-head">
-            <div><p class="eyebrow light">Drone Mission Ops</p><span class="product-status"><i></i> Mission workflow</span></div>
-            <h2>A repeatable workflow for <em>every flight.</em></h2>
-            <p>Move from mission readiness to live capture through one connected operational view.</p>
-          </header>
-          <div class="product-experience">
-            <div class="product-tabs" role="tablist" aria-label="Drone Mission Ops workflow">
-              <button class="is-active" type="button" role="tab" aria-selected="true" data-product="0"><span>01</span><span><strong>Drone ready</strong><small>Sites and docks at a glance</small></span><i aria-hidden="true">↗</i></button>
-              <button type="button" role="tab" aria-selected="false" data-product="1"><span>02</span><span><strong>Pre-flight checks</strong><small>Confirm mission settings</small></span><i aria-hidden="true">↗</i></button>
-              <button type="button" role="tab" aria-selected="false" data-product="2"><span>03</span><span><strong>Health checks</strong><small>Review operating state</small></span><i aria-hidden="true">↗</i></button>
-              <button type="button" role="tab" aria-selected="false" data-product="3"><span>04</span><span><strong>Live capture</strong><small>Maintain a live site view</small></span><i aria-hidden="true">↗</i></button>
-              <button type="button" role="tab" aria-selected="false" data-product="4"><span>05</span><span><strong>Unified planning</strong><small>Plan, track and verify</small></span><i aria-hidden="true">↗</i></button>
-            </div>
-            <div class="product-demo-stage">
-              <div class="product-demo-meta" aria-hidden="true"><span>Guided product walkthrough</span><span><i></i> Active mission view</span></div>
-              <figure class="product-visual restart-progress">
-                <div class="product-window-bar"><span><i></i><i></i><i></i></span><small>Mission workspace</small><b>Live</b></div>
-                <div class="product-screen"><img data-product-image src="assets/product/drone-ready.webp" alt="Drone Mission Ops home showing sites and docked drones, with a drone controller beside the laptop" loading="lazy"><span class="product-scan" aria-hidden="true"></span></div>
-                <figcaption><span class="product-count"><b data-current>01</b> / 05</span><span data-product-caption>Sites and docked drones are ready for a repeatable mission workflow.</span></figcaption>
-                <div class="product-progress" aria-hidden="true"><span data-product-progress></span></div>
-              </figure>
-            </div>
+        <p class="eyebrow light reveal">How Skylark works: Workflow</p>
+        <h2 id="journey-title" class="display light reveal">From site capture to decisions—<span class="tone-soft">one connected workflow.</span></h2>
+        <div class="workflow-explorer reveal" data-workflow-explorer>
+          <div class="workflow-stage-tabs" role="tablist" aria-label="Skylark product workflow">
+            <button id="workflow-tab-skystation" class="is-active" type="button" role="tab" aria-selected="true" aria-controls="workflow-stage-panel" tabindex="0" data-workflow-stage="0"><span>01</span><small>Capture at site</small><strong>SkyStation</strong><p>Repeatable field capture</p></button>
+            <span class="workflow-arrow is-flowing" data-workflow-arrow="0" aria-hidden="true"><i></i></span>
+            <button id="workflow-tab-dmo" type="button" role="tab" aria-selected="false" aria-controls="workflow-stage-panel" tabindex="-1" data-workflow-stage="1"><span>02</span><small>Plan &amp; operate</small><strong>Drone Mission Ops</strong><p>Mission control and execution</p></button>
+            <span class="workflow-arrow" data-workflow-arrow="1" aria-hidden="true"><i></i></span>
+            <button id="workflow-tab-spectra" type="button" role="tab" aria-selected="false" aria-controls="workflow-stage-panel" tabindex="-1" data-workflow-stage="2"><span>03</span><small>Understand data</small><strong>Spectra</strong><p>Spatial intelligence and insight</p></button>
+            <span class="workflow-arrow" data-workflow-arrow="2" aria-hidden="true"><i></i></span>
+            <button id="workflow-tab-team" type="button" role="tab" aria-selected="false" aria-controls="workflow-stage-panel" tabindex="-1" data-workflow-stage="3"><span>04</span><small>Decide &amp; coordinate</small><strong>Your team + Skylark</strong><p>Act from a shared live view</p></button>
           </div>
+          <figure id="workflow-stage-panel" class="workflow-stage-viewer" role="tabpanel" aria-live="polite" aria-labelledby="workflow-tab-skystation">
+            <header>
+              <div><span data-workflow-kicker>01 · Capture at site</span><h3 data-workflow-title>SkyStation</h3><p data-workflow-description>Automated, repeatable drone capture keeps current site evidence flowing from the field.</p></div>
+              <span class="workflow-stage-count"><b data-workflow-current>01</b> / 04</span>
+            </header>
+            <div class="workflow-stage-media"><img src="assets/posts/docks.webp" alt="Drone launching above an automated dock at an operating site" data-workflow-image loading="lazy"><span><i></i> Connected product view</span></div>
+            <figcaption><span>Output</span><strong data-workflow-output>Consistent site capture</strong></figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -218,13 +218,19 @@
     <section class="section industries" id="industries" aria-labelledby="industries-title">
       <div class="shell">
         <p class="eyebrow reveal">Industry solutions</p>
-        <h2 id="industries-title" class="display reveal">Built around the way your industry operates.</h2>
+        <h2 id="industries-title" class="display reveal">Built around the way <span class="tone-soft">your industry operates.</span></h2>
         <div class="industry-tabs reveal" role="tablist" aria-label="Industries">
-          <button type="button" role="tab" aria-selected="true" data-industry="solar">Solar</button><button type="button" role="tab" aria-selected="false" data-industry="wind">Wind</button><button type="button" role="tab" aria-selected="false" data-industry="mining">Mining</button><button type="button" role="tab" aria-selected="false" data-industry="rail">Railways &amp; infrastructure</button><button type="button" role="tab" aria-selected="false" data-industry="power">Power T&amp;D</button><button type="button" role="tab" aria-selected="false" data-industry="oil">Oil &amp; gas</button>
+          <button type="button" role="tab" aria-selected="true" data-industry="solar"><span>01</span>Solar</button><button type="button" role="tab" aria-selected="false" data-industry="wind"><span>02</span>Wind</button><button type="button" role="tab" aria-selected="false" data-industry="mining"><span>03</span>Mining</button><button type="button" role="tab" aria-selected="false" data-industry="oil"><span>04</span>Oil &amp; gas</button><button type="button" role="tab" aria-selected="false" data-industry="rail"><span>05</span>Railways &amp; infrastructure</button><button type="button" role="tab" aria-selected="false" data-industry="power"><span>06</span>Power T&amp;D</button>
         </div>
         <div class="industry-panel reveal" data-industry-panel>
-          <figure><img src="assets/aerial/solar.webp" alt="Diagonal rows of solar panels in a desert solar park from the air" data-industry-image loading="lazy"><figcaption data-industry-kicker>Construction progress</figcaption></figure>
+          <figure>
+            <img src="assets/aerial/solar.webp" alt="Diagonal rows of solar panels in a desert solar park from the air" data-industry-image loading="lazy">
+            <div class="industry-hud" aria-hidden="true"><span><i></i> Aerial site view</span><b>Live intelligence</b></div>
+            <div class="industry-coordinates" aria-hidden="true"><span>Site coverage</span><strong>Operational view · 01</strong></div>
+            <figcaption><i></i><span data-industry-kicker>Construction progress</span></figcaption>
+          </figure>
           <div class="industry-copy">
+            <div class="industry-copy-status"><span><i></i> Industry intelligence</span><b>Aerial · Spatial · Operational</b></div>
             <p class="eyebrow" data-industry-name>Solar</p><h3 data-industry-title>Track the build. Locate the faults.</h3><p class="lede" data-industry-description>Assess terrain, verify construction progress, track loose inventory and locate module-level anomalies for maintenance.</p>
             <div class="use-cases" data-industry-cases>
               <div><strong>EPC</strong><ul><li>AC and DC construction monitoring</li><li>Loose inventory tracking</li><li>Worksite safety monitoring</li></ul></div><div><strong>O&amp;M</strong><ul><li>O&amp;M inspection</li><li>Shadow analysis</li><li>Site patrolling and security monitoring</li></ul></div><div><strong>Hydrology</strong><ul><li>Land feasibility analysis</li></ul></div>
@@ -238,7 +244,7 @@
     <section class="section testimonials" aria-labelledby="testimonials-title">
       <div class="shell">
         <p class="eyebrow light reveal">Customer success</p>
-        <h2 id="testimonials-title" class="display light reveal">Trusted by teams advancing the nation’s critical infrastructure.</h2>
+        <h2 id="testimonials-title" class="display light reveal">Trusted by teams <span class="tone-soft">advancing the nation’s critical infrastructure.</span></h2>
         <div class="success-logo-rail reveal" aria-label="Customers using Skylark solutions">
           <span>Trusted across critical infrastructure</span>
           <div>
@@ -246,16 +252,34 @@
           </div>
         </div>
         <div class="quote-grid">
-          <figure class="quote reveal" tabindex="0"><div class="quote-top"><figcaption><span>Steel</span>Solar project delivery from design to commissioning</figcaption><i aria-hidden="true">↗</i></div><blockquote>“Partnering with Skylark on our solar projects was seamless. From design to commissioning, their professionalism, quality, and timely execution stood out. Their proactive planning and stakeholder coordination ensured smooth execution and excellent results.”</blockquote><p><strong>Head of Sales Operations</strong><br>Major steel producer in India</p><small class="quote-index" aria-hidden="true">01</small></figure>
-          <figure class="quote reveal" tabindex="0"><div class="quote-top"><figcaption><span>Solar</span>Solar construction and autonomous inspections</figcaption><i aria-hidden="true">↗</i></div><blockquote>“Skylark helped us build one of India’s fastest solar plants. Autonomous inspections caught faults before they cost us generation, reduced downtime, lowered OpEx, and increased overall output.”</blockquote><p><strong>Chief Commercial Officer</strong><br>Commercial and industrial renewable energy provider</p><small class="quote-index" aria-hidden="true">02</small></figure>
-          <figure class="quote reveal" tabindex="0"><div class="quote-top"><figcaption><span>Renewable energy</span>Construction monitoring for a 750 MW project</figcaption><i aria-hidden="true">↗</i></div><blockquote>“Skylark Drones transformed how we managed our 750 MW project, reducing our build time by half. Aerial intelligence helped us monitor progress, improve safety oversight, and accelerate construction. It’s now a core part of our workflow across multiple sites.”</blockquote><p><strong>Chief Digital Officer</strong><br>Large Indian infrastructure and energy group</p><small class="quote-index" aria-hidden="true">03</small></figure>
+          <figure class="quote testimonial-card reveal" tabindex="0">
+            <span class="testimonial-sector">Steel · Solar delivery</span>
+            <div class="testimonial-mark" aria-hidden="true">“</div>
+            <blockquote>Partnering with Skylark on our solar projects was seamless. From design to commissioning, their professionalism, quality, and timely execution stood out. Their proactive planning and stakeholder coordination ensured smooth execution and excellent results.</blockquote>
+            <span class="testimonial-divider" aria-hidden="true"></span>
+            <figcaption class="testimonial-author"><strong>Head of Sales Operations</strong><span>Major steel producer in India</span></figcaption>
+          </figure>
+          <figure class="quote testimonial-card reveal" tabindex="0">
+            <span class="testimonial-sector">Solar · Autonomous inspection</span>
+            <div class="testimonial-mark" aria-hidden="true">“</div>
+            <blockquote>Skylark helped us build one of India’s fastest solar plants. Autonomous inspections caught faults before they cost us generation, reduced downtime, lowered OpEx, and increased overall output.</blockquote>
+            <span class="testimonial-divider" aria-hidden="true"></span>
+            <figcaption class="testimonial-author"><strong>Chief Commercial Officer</strong><span>Commercial and industrial renewable energy provider</span></figcaption>
+          </figure>
+          <figure class="quote testimonial-card reveal" tabindex="0">
+            <span class="testimonial-sector">Renewable energy · Construction</span>
+            <div class="testimonial-mark" aria-hidden="true">“</div>
+            <blockquote>Skylark Drones transformed how we managed our 750 MW project, reducing our build time by half. Aerial intelligence helped us monitor progress, improve safety oversight, and accelerate construction. It’s now a core part of our workflow across multiple sites.</blockquote>
+            <span class="testimonial-divider" aria-hidden="true"></span>
+            <figcaption class="testimonial-author"><strong>Chief Digital Officer</strong><span>Large Indian infrastructure and energy group</span></figcaption>
+          </figure>
         </div>
       </div>
     </section>
 
     <section class="section resources" id="resources" aria-labelledby="resources-title">
       <div class="shell">
-        <div class="section-heading reveal"><div><p class="eyebrow">Resources &amp; insights</p><h2 id="resources-title" class="display">Practical insights for informed site decisions.</h2></div><a class="text-link" href="https://skylarkdrones.com/blog">Explore all resources <span>↗</span></a></div>
+        <div class="section-heading reveal"><div><p class="eyebrow">Resources &amp; insights</p><h2 id="resources-title" class="display">Practical insights <span class="tone-soft">for informed site decisions.</span></h2></div><a class="text-link" href="https://skylarkdrones.com/blog">Explore all resources <span>↗</span></a></div>
         <div class="resource-grid">
           <a class="resource-card reveal" href="https://skylarkdrones.com/blog/drone-docks-solar-infrastructure"><figure><img src="assets/posts/docks.webp" alt="" loading="lazy"></figure><span>Autonomous monitoring</span><h3>The solar site that monitors itself: why autonomous drone docks are becoming core EPC infrastructure</h3><p>How stationed drone systems connect recurring site capture with construction monitoring and project governance.</p></a>
           <a class="resource-card reveal" href="https://skylarkdrones.com/blog/solar-inspection-turnaround-time-business-impact"><figure><img src="assets/posts/solar.webp" alt="" loading="lazy"></figure><span>Solar operations</span><h3>Solar inspection turnaround: the hidden revenue variable</h3><p>Why the time between inspection and actionable insight matters for maintenance decisions and asset performance.</p></a>
@@ -274,7 +298,7 @@
         <span class="contact-orbit"><img src="assets/brand/bird.svg" alt=""></span>
       </div>
       <div class="shell contact-inner reveal">
-        <div class="contact-copy"><p class="eyebrow light">Start a conversation</p><h2 id="contact-title">Bring your site into view.</h2><p>Tell us about your site, operations, or inspection requirements.</p></div>
+        <div class="contact-copy"><p class="eyebrow light">Start a conversation</p><h2 id="contact-title">See more. <span class="tone-soft">Act sooner.</span></h2><p>Tell us about your site, operations, or inspection requirements.</p></div>
         <button class="button button-accent cta-button" type="button" data-open-dialog>Book a demo <span aria-hidden="true">↗</span></button>
       </div>
     </section>

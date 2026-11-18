@@ -41,32 +41,39 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
   qsa('.quote').forEach(card=>card.addEventListener('pointermove',event=>{const bounds=card.getBoundingClientRect();card.style.setProperty('--qx',`${event.clientX-bounds.left}px`);card.style.setProperty('--qy',`${event.clientY-bounds.top}px`)}));
 }
 
-// Product story
-const products=[
-  {image:'assets/product/drone-ready.webp',alt:'Drone Mission Ops home showing sites and docked drones, with a drone controller beside the laptop',caption:'Sites and docked drones are ready for a repeatable mission workflow.'},
-  {image:'assets/product/preflight.webp',alt:'Pre-flight checks on the drone controller: storage, battery thresholds, obstacle sensing and altitude limits',caption:'Pre-flight checks bring critical mission settings into one view.'},
-  {image:'assets/product/health.webp',alt:'The drone health screen on the controller, showing battery, vision and satellite status',caption:'Health checks surface the operating state before capture.'},
-  {image:'assets/product/live-capture.webp',alt:'Drone footage over a mine bench, with people detected and boxed',caption:'Live capture helps teams maintain an immediate view of the site.'},
-  {image:'assets/product/unified-planning.webp',alt:'Live mission tracking, terrain-aware planning, elevation and airspace checks, and data checks',caption:'Planning, live mission tracking and data checks come together in one workflow.'}
+// Interactive product workflow: SkyStation → Drone Mission Ops → Spectra → Your team + Skylark.
+const workflowStages=[
+  {kicker:'01 · Capture at site',title:'SkyStation',description:'Automated, repeatable drone capture keeps current site evidence flowing from the field.',output:'Consistent site capture',image:'assets/product/skystation-platform.png',alt:'SkyStation product view showing the stationed-system dashboard on a laptop alongside a drone field controller'},
+  {kicker:'02 · Plan & operate',title:'Drone Mission Ops',description:'Plan missions, verify readiness and monitor flight execution from one operational workspace.',output:'Controlled mission execution',image:'assets/product/dmo-live-stream.png',alt:'Drone Mission Ops live-stream interface showing flight status, camera controls and the Share to Web dialog'},
+  {kicker:'03 · Understand data',title:'Spectra',description:'Organize spatial data, inspect site evidence and turn captured information into actionable insight.',output:'Decision-ready intelligence',image:'assets/product/spectra-design-overlays.png',alt:'Spectra Design Overlays interface showing survey layers and mapped development boundaries'},
+  {kicker:'04 · Decide & coordinate',title:'Your team + Skylark',description:'Work from a shared live operational view to coordinate inspection, verify conditions and move priorities forward.',output:'Coordinated site action',image:'assets/product/team-skylark-live-view.png',alt:'Shared Drone Mission Ops live view showing an aerial city feed, camera controls, flight telemetry and team coordination tools'}
 ];
-const productStage=qs('[data-product-stage]');
-const productButtons=qsa('[data-product]'),productFigure=qs('.product-visual',productStage);
-let productIndex=0,productTimer,productSwap;
-function selectProduct(index,userInitiated=false){
-  productIndex=index;
-  productButtons.forEach((button,i)=>{button.classList.toggle('is-active',i===index);button.setAttribute('aria-selected',String(i===index))});
-  productFigure.classList.add('is-switching');
-  clearTimeout(productSwap);
-  productSwap=setTimeout(()=>{const p=products[index],img=qs('[data-product-image]');img.src=p.image;img.alt=p.alt;qs('[data-product-caption]').textContent=p.caption;qs('[data-current]').textContent=String(index+1).padStart(2,'0');productFigure.classList.remove('is-switching');productFigure.classList.remove('restart-progress');void productFigure.offsetWidth;productFigure.classList.add('restart-progress')},180);
-  if(userInitiated)startProductStory();
+const workflowExplorer=qs('[data-workflow-explorer]'),workflowButtons=qsa('[data-workflow-stage]'),workflowArrows=qsa('[data-workflow-arrow]'),workflowViewer=qs('.workflow-stage-viewer',workflowExplorer);
+let workflowSwap,workflowTimer,workflowIndex=0,workflowVisible=false,workflowHovering=false,workflowFocused=false;
+function startWorkflowMotion(){
+  clearInterval(workflowTimer);
+  if(workflowVisible&&!reduceMotion.matches&&!workflowHovering&&!workflowFocused)workflowTimer=setInterval(()=>selectWorkflowStage((workflowIndex+1)%workflowStages.length),1800);
 }
-function startProductStory(){clearInterval(productTimer);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)productTimer=setInterval(()=>selectProduct((productIndex+1)%products.length),5200)}
-productButtons.forEach(button=>button.addEventListener('click',()=>selectProduct(Number(button.dataset.product),true)));
-productStage.addEventListener('pointerenter',()=>clearInterval(productTimer));
-productStage.addEventListener('pointerleave',startProductStory);
-productStage.addEventListener('focusin',()=>clearInterval(productTimer));
-productStage.addEventListener('focusout',event=>{if(!productStage.contains(event.relatedTarget))startProductStory()});
-startProductStory();
+function selectWorkflowStage(index,userInitiated=false){
+  workflowIndex=index;
+  workflowButtons.forEach((button,i)=>{button.classList.toggle('is-active',i===index);button.classList.toggle('is-complete',i<index);button.setAttribute('aria-selected',String(i===index));button.tabIndex=i===index?0:-1});
+  workflowArrows.forEach((arrow,i)=>{arrow.classList.toggle('is-flowing',i===index);arrow.classList.toggle('is-complete',i<index)});
+  workflowViewer.setAttribute('aria-labelledby',workflowButtons[index].id);
+  workflowViewer.classList.add('is-switching');
+  clearTimeout(workflowSwap);
+  workflowSwap=setTimeout(()=>{const stage=workflowStages[index],image=qs('[data-workflow-image]',workflowExplorer);image.src=stage.image;image.alt=stage.alt;qs('[data-workflow-kicker]',workflowExplorer).textContent=stage.kicker;qs('[data-workflow-title]',workflowExplorer).textContent=stage.title;qs('[data-workflow-description]',workflowExplorer).textContent=stage.description;qs('[data-workflow-output]',workflowExplorer).textContent=stage.output;qs('[data-workflow-current]',workflowExplorer).textContent=String(index+1).padStart(2,'0');workflowViewer.classList.remove('is-switching')},120);
+  if(userInitiated)startWorkflowMotion();
+}
+workflowButtons.forEach((button,index)=>{
+  button.addEventListener('click',()=>selectWorkflowStage(index,true));
+  button.addEventListener('keydown',event=>{if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;event.preventDefault();const next=(index+(event.key==='ArrowRight'?1:-1)+workflowButtons.length)%workflowButtons.length;workflowButtons[next].focus();selectWorkflowStage(next,true)});
+});
+workflowExplorer.addEventListener('pointerenter',()=>{workflowHovering=true;startWorkflowMotion()});
+workflowExplorer.addEventListener('pointerleave',()=>{workflowHovering=false;startWorkflowMotion()});
+workflowExplorer.addEventListener('focusin',()=>{workflowFocused=true;startWorkflowMotion()});
+workflowExplorer.addEventListener('focusout',event=>{if(!workflowExplorer.contains(event.relatedTarget)){workflowFocused=false;startWorkflowMotion()}});
+new IntersectionObserver(([entry])=>{workflowVisible=entry.isIntersecting;startWorkflowMotion()},{threshold:.25}).observe(workflowExplorer);
+reduceMotion.addEventListener?.('change',startWorkflowMotion);
 
 // Industry explorer. Copy is preserved from the source site.
 const industries={
