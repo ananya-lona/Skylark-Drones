@@ -10,21 +10,11 @@ setHeroMotion();
 
 // Header and mobile navigation
 const header=qs('[data-header]'); let previousY=0;
-addEventListener('scroll',()=>{const y=scrollY,menuOpen=menuButton?.getAttribute('aria-expanded')==='true',headerFocused=header?.contains(document.activeElement);header?.classList.toggle('is-hidden',!menuOpen&&!headerFocused&&y>previousY&&y>160);previousY=y},{passive:true});
+addEventListener('scroll',()=>{const y=scrollY;header.classList.toggle('is-hidden',y>previousY&&y>160);previousY=y},{passive:true});
 const menuButton=qs('.menu-button'),mobileMenu=qs('.mobile-menu');
-function setMobileMenu(open,returnFocus=false){
-  menuButton.setAttribute('aria-expanded',String(open));
-  menuButton.setAttribute('aria-label',open?'Close menu':'Open menu');
-  mobileMenu.hidden=!open;
-  document.body.classList.toggle('menu-open',open);
-  header.classList.remove('is-hidden');
-  if(returnFocus)menuButton.focus();
-}
-menuButton.addEventListener('click',()=>setMobileMenu(menuButton.getAttribute('aria-expanded')!=='true'));
-qsa('.mobile-menu a').forEach(a=>a.addEventListener('click',()=>setMobileMenu(false)));
-addEventListener('click',event=>{if(!mobileMenu.hidden&&!header.contains(event.target))setMobileMenu(false)});
-addEventListener('keydown',event=>{if(event.key==='Escape'&&!mobileMenu.hidden)setMobileMenu(false,true)});
-matchMedia('(min-width: 1101px)').addEventListener?.('change',event=>{if(event.matches)setMobileMenu(false)});
+menuButton.addEventListener('click',()=>{const open=menuButton.getAttribute('aria-expanded')==='true';menuButton.setAttribute('aria-expanded',String(!open));menuButton.setAttribute('aria-label',open?'Open menu':'Close menu');mobileMenu.hidden=open});
+qsa('.mobile-menu a').forEach(a=>a.addEventListener('click',()=>{mobileMenu.hidden=true;menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open menu')}));
+addEventListener('keydown',event=>{if(event.key==='Escape'&&!mobileMenu.hidden){mobileMenu.hidden=true;menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open menu');menuButton.focus()}});
 
 // Progressive section reveals
 const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -40px'});
@@ -36,7 +26,7 @@ if(outcomeRail){
   const outcomeMarker=qs('.outcome-flight-marker',outcomeRail);
   const outcomeSteps=qsa('[data-outcome-step]',outcomeRail);
   const outcomeCards=qsa('[data-outcome-card]',outcomeRail);
-  let activeOutcome=-1,outcomeFrame,outcomeVisible=false;
+  let activeOutcome=-1,outcomeFrame;
   const setActiveOutcome=index=>{
     if(index===activeOutcome)return;
     activeOutcome=index;
@@ -44,7 +34,6 @@ if(outcomeRail){
     outcomeCards.forEach((card,i)=>card.classList.toggle('is-active',i===index));
   };
   const syncOutcomeRail=()=>{
-    if(!outcomeVisible)return;
     const animation=outcomeMarker.getAnimations()[0];
     if(animation&&animation.currentTime!==null){
       const progress=animation.effect.getComputedTiming().progress??0;
@@ -53,16 +42,12 @@ if(outcomeRail){
     }
     outcomeFrame=requestAnimationFrame(syncOutcomeRail);
   };
-  const startOutcomeSync=()=>{
-    cancelAnimationFrame(outcomeFrame);
-    if(reduceMotion.matches)setActiveOutcome(0);
-    else if(outcomeVisible)outcomeFrame=requestAnimationFrame(syncOutcomeRail);
-  };
-  new IntersectionObserver(([entry])=>{outcomeVisible=entry.isIntersecting;if(!outcomeVisible)setActiveOutcome(-1);startOutcomeSync()},{rootMargin:'120px 0px',threshold:.05}).observe(outcomeRail);
+  if(reduceMotion.matches)setActiveOutcome(0);
+  else outcomeFrame=requestAnimationFrame(syncOutcomeRail);
   reduceMotion.addEventListener?.('change',event=>{
     cancelAnimationFrame(outcomeFrame);
     if(event.matches)setActiveOutcome(0);
-    else startOutcomeSync();
+    else outcomeFrame=requestAnimationFrame(syncOutcomeRail);
   });
 }
 
@@ -130,22 +115,8 @@ const industries={
  power:{name:'Power T&D',kicker:'Inspection corridor',title:'Make network condition easier to inspect.',description:'Identify component defects, thermal hotspots and vegetation encroachments to prioritise field inspection and maintenance.',image:'assets/aerial/power.webp',alt:'High-voltage lines and their shadows across fields',href:'https://skylarkdrones.com/industries-powerline-pipeline',groups:[['Plan & build','Corridor surveys'],['Operate & maintain','Component defect detection','Thermal hotspot detection','Vegetation encroachment']]},
  oil:{name:'Oil & gas',kicker:'Corridor inspection',title:'Bring remote corridors into view.',description:'Map pipeline corridors and surface potential defects, leaks and encroachments for investigation.',image:'assets/aerial/oil-gas.webp',alt:'A pipeline corridor with a fresh trench and a valve station across farmland, seen from the air',href:'https://skylarkdrones.com/industries-powerline-pipeline',groups:[['Plan & build','Pipeline corridor mapping'],['Operate & maintain','Potential defect and leak surfacing','Encroachment monitoring']]}
 };
-const industryPanel=qs('[data-industry-panel]'),industryButtons=qsa('[data-industry]');
-let industrySwap;
-function selectIndustry(button){
-  const d=industries[button.dataset.industry];
-  industryButtons.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1});
-  industryPanel.setAttribute('aria-labelledby',button.id);
-  industryPanel.setAttribute('aria-busy','true');
-  industryPanel.classList.add('is-switching');
-  clearTimeout(industrySwap);
-  industrySwap=setTimeout(()=>{const image=qs('[data-industry-image]');image.src=d.image;image.alt=d.alt;qs('[data-industry-kicker]').textContent=d.kicker;qs('[data-industry-name]').textContent=d.name;qs('[data-industry-title]').textContent=d.title;qs('[data-industry-description]').textContent=d.description;const link=qs('[data-industry-link]');link.href=d.href;link.textContent=`Explore ${d.name.toLowerCase()} solutions`;qs('[data-industry-cases]').innerHTML=d.groups.map(g=>`<div><strong>${g[0]}</strong><ul>${g.slice(1).map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');industryPanel.classList.remove('is-switching');industryPanel.removeAttribute('aria-busy')},180);
-}
-industryButtons.forEach((button,index)=>{
-  button.tabIndex=index===0?0:-1;
-  button.addEventListener('click',()=>selectIndustry(button));
-  button.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?industryButtons.length-1:(index+(event.key==='ArrowRight'?1:-1)+industryButtons.length)%industryButtons.length;industryButtons[next].focus();selectIndustry(industryButtons[next])});
-});
+const industryPanel=qs('[data-industry-panel]');
+qsa('[data-industry]').forEach(button=>button.addEventListener('click',()=>{const d=industries[button.dataset.industry];qsa('[data-industry]').forEach(b=>b.setAttribute('aria-selected',String(b===button)));industryPanel.classList.add('is-switching');setTimeout(()=>{const image=qs('[data-industry-image]');image.src=d.image;image.alt=d.alt;qs('[data-industry-kicker]').textContent=d.kicker;qs('[data-industry-name]').textContent=d.name;qs('[data-industry-title]').textContent=d.title;qs('[data-industry-description]').textContent=d.description;const link=qs('[data-industry-link]');link.href=d.href;link.innerHTML=`Explore ${d.name.toLowerCase()} solutions <span>↗</span>`;qs('[data-industry-cases]').innerHTML=d.groups.map(g=>`<div><strong>${g[0]}</strong><ul>${g.slice(1).map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');industryPanel.classList.remove('is-switching')},180)}));
 
 // Accessible demo dialog with local-only validation and transparent simulated feedback.
 const dialog=qs('.demo-dialog'),form=qs('#demo-form');
