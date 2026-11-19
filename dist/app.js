@@ -20,6 +20,37 @@ addEventListener('keydown',event=>{if(event.key==='Escape'&&!mobileMenu.hidden){
 const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -40px'});
 qsa('.reveal').forEach((el,i)=>{el.style.transitionDelay=`${Math.min(i%5,4)*55}ms`;observer.observe(el)});
 
+// Keep each operational-outcome card and checkpoint locked to the moving bird.
+const outcomeRail=qs('[data-outcome-rail]');
+if(outcomeRail){
+  const outcomeMarker=qs('.outcome-flight-marker',outcomeRail);
+  const outcomeSteps=qsa('[data-outcome-step]',outcomeRail);
+  const outcomeCards=qsa('[data-outcome-card]',outcomeRail);
+  let activeOutcome=-1,outcomeFrame;
+  const setActiveOutcome=index=>{
+    if(index===activeOutcome)return;
+    activeOutcome=index;
+    outcomeSteps.forEach((step,i)=>step.classList.toggle('is-active',i===index));
+    outcomeCards.forEach((card,i)=>card.classList.toggle('is-active',i===index));
+  };
+  const syncOutcomeRail=()=>{
+    const animation=outcomeMarker.getAnimations()[0];
+    if(animation&&animation.currentTime!==null){
+      const progress=animation.effect.getComputedTiming().progress??0;
+      const nearest=Math.round(progress*4);
+      setActiveOutcome(Math.abs(progress-nearest/4)<=.075?nearest:-1);
+    }
+    outcomeFrame=requestAnimationFrame(syncOutcomeRail);
+  };
+  if(reduceMotion.matches)setActiveOutcome(0);
+  else outcomeFrame=requestAnimationFrame(syncOutcomeRail);
+  reduceMotion.addEventListener?.('change',event=>{
+    cancelAnimationFrame(outcomeFrame);
+    if(event.matches)setActiveOutcome(0);
+    else outcomeFrame=requestAnimationFrame(syncOutcomeRail);
+  });
+}
+
 // Uiverse-inspired card depth: a restrained pointer spotlight and subtle tilt.
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
   qsa('.clarity-node').forEach(card=>{
