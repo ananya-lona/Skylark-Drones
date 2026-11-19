@@ -20,6 +20,18 @@ addEventListener('keydown',event=>{if(event.key==='Escape'&&!mobileMenu.hidden){
 const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -40px'});
 qsa('.reveal').forEach((el,i)=>{el.style.transitionDelay=`${Math.min(i%5,4)*55}ms`;observer.observe(el)});
 
+// Count company metrics up once when the strip enters view, matching the reference interaction.
+const metricStrip=qs('.proof-metrics'),metricCounters=metricStrip?qsa('[data-counter]',metricStrip):[];
+if(metricStrip&&metricCounters.length&&!reduceMotion.matches){
+ metricCounters.forEach(counter=>{counter.textContent='0'});
+ const animateMetric=(counter,index)=>{
+  const target=Number(counter.dataset.counter),duration=1250;
+  setTimeout(()=>{const start=performance.now();counter.closest('li').classList.add('is-counting');const tick=now=>{const progress=Math.min((now-start)/duration,1),eased=1-Math.pow(1-progress,3);counter.textContent=String(Math.round(target*eased));if(progress<1)requestAnimationFrame(tick);else counter.textContent=String(target)};requestAnimationFrame(tick)},index*120);
+ };
+ const metricObserver=new IntersectionObserver(([entry])=>{if(!entry.isIntersecting)return;metricCounters.forEach(animateMetric);metricObserver.unobserve(metricStrip)},{threshold:.35});
+ metricObserver.observe(metricStrip);
+}
+
 // Keep each operational-outcome card and checkpoint locked to the moving bird.
 const outcomeRail=qs('[data-outcome-rail]');
 if(outcomeRail){
@@ -80,43 +92,56 @@ const workflowStages=[
   {kicker:'04 · Decide & coordinate',title:'Your team + Skylark',description:'Work from a shared live operational view to coordinate inspection, verify conditions and move priorities forward.',output:'Coordinated site action',image:'assets/product/team-skylark-live-view.png',alt:'Shared Drone Mission Ops live view showing an aerial city feed, camera controls, flight telemetry and team coordination tools'}
 ];
 const workflowExplorer=qs('[data-workflow-explorer]'),workflowButtons=qsa('[data-workflow-stage]'),workflowArrows=qsa('[data-workflow-arrow]'),workflowViewer=qs('.workflow-stage-viewer',workflowExplorer);
-let workflowSwap,workflowTimer,workflowIndex=0,workflowVisible=false,workflowHovering=false,workflowFocused=false;
+let workflowSwap,workflowTimer,workflowIndex=0,workflowVisible=false,workflowUserControlled=false;
 function startWorkflowMotion(){
   clearInterval(workflowTimer);
-  if(workflowVisible&&!reduceMotion.matches&&!workflowHovering&&!workflowFocused)workflowTimer=setInterval(()=>selectWorkflowStage((workflowIndex+1)%workflowStages.length),1800);
+  if(workflowVisible&&!reduceMotion.matches&&!workflowUserControlled)workflowTimer=setInterval(()=>selectWorkflowStage((workflowIndex+1)%workflowStages.length),3600);
 }
 function selectWorkflowStage(index,userInitiated=false){
+  if(userInitiated){workflowUserControlled=true;workflowExplorer.classList.add('is-user-controlled');workflowExplorer.style.setProperty('--workflow-selected-progress',`${index/3*100}%`)}
   workflowIndex=index;
   workflowButtons.forEach((button,i)=>{button.classList.toggle('is-active',i===index);button.classList.toggle('is-complete',i<index);button.setAttribute('aria-selected',String(i===index));button.tabIndex=i===index?0:-1});
   workflowArrows.forEach((arrow,i)=>{arrow.classList.toggle('is-flowing',i===index);arrow.classList.toggle('is-complete',i<index)});
   workflowViewer.setAttribute('aria-labelledby',workflowButtons[index].id);
   workflowViewer.classList.add('is-switching');
   clearTimeout(workflowSwap);
-  workflowSwap=setTimeout(()=>{const stage=workflowStages[index],image=qs('[data-workflow-image]',workflowExplorer);image.src=stage.image;image.alt=stage.alt;qs('[data-workflow-kicker]',workflowExplorer).textContent=stage.kicker;qs('[data-workflow-title]',workflowExplorer).textContent=stage.title;qs('[data-workflow-description]',workflowExplorer).textContent=stage.description;qs('[data-workflow-output]',workflowExplorer).textContent=stage.output;qs('[data-workflow-current]',workflowExplorer).textContent=String(index+1).padStart(2,'0');workflowViewer.classList.remove('is-switching')},120);
+  workflowSwap=setTimeout(()=>{const stage=workflowStages[index],image=qs('[data-workflow-image]',workflowExplorer);image.src=stage.image;image.alt=stage.alt;qs('[data-workflow-description]',workflowExplorer).textContent=stage.description;qs('[data-workflow-output]',workflowExplorer).textContent=stage.output;requestAnimationFrame(()=>requestAnimationFrame(()=>workflowViewer.classList.remove('is-switching')))},200);
   if(userInitiated)startWorkflowMotion();
 }
 workflowButtons.forEach((button,index)=>{
   button.addEventListener('click',()=>selectWorkflowStage(index,true));
   button.addEventListener('keydown',event=>{if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;event.preventDefault();const next=(index+(event.key==='ArrowRight'?1:-1)+workflowButtons.length)%workflowButtons.length;workflowButtons[next].focus();selectWorkflowStage(next,true)});
 });
-workflowExplorer.addEventListener('pointerenter',()=>{workflowHovering=true;startWorkflowMotion()});
-workflowExplorer.addEventListener('pointerleave',()=>{workflowHovering=false;startWorkflowMotion()});
-workflowExplorer.addEventListener('focusin',()=>{workflowFocused=true;startWorkflowMotion()});
-workflowExplorer.addEventListener('focusout',event=>{if(!workflowExplorer.contains(event.relatedTarget)){workflowFocused=false;startWorkflowMotion()}});
-new IntersectionObserver(([entry])=>{workflowVisible=entry.isIntersecting;startWorkflowMotion()},{threshold:.25}).observe(workflowExplorer);
+new IntersectionObserver(([entry])=>{
+  workflowVisible=entry.isIntersecting;
+  workflowExplorer.classList.remove('is-motion-visible');
+  if(workflowVisible&&!workflowUserControlled&&!reduceMotion.matches){
+    if(workflowIndex!==0)selectWorkflowStage(0);
+    void workflowExplorer.offsetWidth;
+    workflowExplorer.classList.add('is-motion-visible');
+  }
+  startWorkflowMotion();
+},{threshold:.25}).observe(workflowExplorer);
 reduceMotion.addEventListener?.('change',startWorkflowMotion);
 
 // Industry explorer. Copy is preserved from the source site.
 const industries={
- solar:{name:'Solar',kicker:'Construction progress',title:'Track the build. Locate the faults.',description:'Assess terrain, verify construction progress, track loose inventory and locate module-level anomalies for maintenance.',image:'assets/aerial/solar.webp',alt:'Diagonal rows of solar panels in a desert solar park from the air',href:'https://skylarkdrones.com/solar',groups:[['EPC','AC and DC construction monitoring','Loose inventory tracking','Worksite safety monitoring'],['O&M','O&M inspection','Shadow analysis','Site patrolling and security monitoring'],['Hydrology','Land feasibility analysis']]},
- wind:{name:'Wind',kicker:'Construction readiness',title:'Plan access. Verify readiness.',description:'Evaluate access routes and substation locations, monitor construction and document feeder-line and commissioning readiness.',image:'assets/aerial/wind.webp',alt:'Wind turbines and a turbine under construction in dry scrubland, seen from the air',href:'https://skylarkdrones.com/',groups:[['Planning & readiness','Access routes and blade-swing clearance','Pooling substation location planning','Turbine-location readiness'],['Construction monitoring','Construction progress tracking','Crane utilisation','33 kV feeder-line inspection']]},
- mining:{name:'Mining',kicker:'Measure & reconcile',title:'Measure production from pit to stockpile.',description:'Track volumes and inventory, compare site changes and inspect operating conditions.',image:'assets/aerial/mining-live.webp',alt:'Haul trucks on an open-cast mine’s roads, seen from a drone',href:'https://skylarkdrones.com/mining',groups:[['Measure & reconcile','Stockpile and pit volume reconciliation','Mine plan vs actual excavation','Post-blast volume analysis'],['Monitor operations','Haul-road and bench condition monitoring','Haulage and crusher queue monitoring','Production and compliance reporting']]},
- rail:{name:'Railways & infrastructure',kicker:'Corridor progress',title:'Keep progress grounded in site evidence.',description:'Map corridors, verify earthworks, compare construction against plan and inspect infrastructure conditions.',image:'assets/aerial/rail.webp',alt:'An electrified freight railway beside a highway under construction, seen from above',href:'https://skylarkdrones.com/roads-railways',groups:[['Plan & build','Corridor mapping','Earthwork verification','Progress against plan'],['Operate & maintain','Infrastructure condition inspection']]},
- power:{name:'Power T&D',kicker:'Inspection corridor',title:'Make network condition easier to inspect.',description:'Identify component defects, thermal hotspots and vegetation encroachments to prioritise field inspection and maintenance.',image:'assets/aerial/power.webp',alt:'High-voltage lines and their shadows across fields',href:'https://skylarkdrones.com/industries-powerline-pipeline',groups:[['Plan & build','Corridor surveys'],['Operate & maintain','Component defect detection','Thermal hotspot detection','Vegetation encroachment']]},
- oil:{name:'Oil & gas',kicker:'Corridor inspection',title:'Bring remote corridors into view.',description:'Map pipeline corridors and surface potential defects, leaks and encroachments for investigation.',image:'assets/aerial/oil-gas.webp',alt:'A pipeline corridor with a fresh trench and a valve station across farmland, seen from the air',href:'https://skylarkdrones.com/industries-powerline-pipeline',groups:[['Plan & build','Pipeline corridor mapping'],['Operate & maintain','Potential defect and leak surfacing','Encroachment monitoring']]}
+ solar:{name:'Solar',kicker:'Construction progress',title:'Track the build. Locate faults.',image:'assets/aerial/solar.webp',alt:'Diagonal rows of solar panels in a desert solar park from the air',href:'https://skylarkdrones.com/solar',groups:[['Build','Construction progress','Inventory tracking'],['Operate','Module inspection','Site monitoring']]},
+ wind:{name:'Wind',kicker:'Construction readiness',title:'Plan access. Verify readiness.',image:'assets/aerial/wind.webp',alt:'Wind turbines and a turbine under construction in dry scrubland, seen from the air',href:'https://skylarkdrones.com/',groups:[['Plan','Access clearance','Substation planning'],['Build','Progress tracking','Feeder-line inspection']]},
+ mining:{name:'Mining',kicker:'Measure & reconcile',title:'Measure pit to stockpile.',image:'assets/aerial/mining-live.webp',alt:'Haul trucks on an open-cast mine’s roads, seen from a drone',href:'https://skylarkdrones.com/mining',groups:[['Measure','Volume reconciliation','Plan vs actual'],['Monitor','Road and bench condition','Production reporting']]},
+ rail:{name:'Railway',kicker:'Corridor progress',title:'Ground progress in evidence.',image:'assets/aerial/rail.webp',alt:'An electrified freight railway beside a highway under construction, seen from above',href:'https://skylarkdrones.com/roads-railways',groups:[['Build','Corridor mapping','Earthwork verification'],['Maintain','Progress against plan','Condition inspection']]},
+ power:{name:'Power T&D',kicker:'Inspection corridor',title:'Inspect network condition.',image:'assets/aerial/power.webp',alt:'High-voltage lines and their shadows across fields',href:'https://skylarkdrones.com/industries-powerline-pipeline',groups:[['Survey','Corridor mapping','Asset inventory'],['Inspect','Thermal hotspots','Vegetation risk']]},
+ oil:{name:'Oil & gas',kicker:'Corridor inspection',title:'Bring remote corridors into view.',image:'assets/aerial/oil-gas.webp',alt:'A pipeline corridor with a fresh trench and a valve station across farmland, seen from the air',href:'https://skylarkdrones.com/industries-powerline-pipeline',groups:[['Survey','Corridor mapping','Right-of-way review'],['Inspect','Potential leak surfacing','Encroachment monitoring']]}
 };
-const industryPanel=qs('[data-industry-panel]');
-qsa('[data-industry]').forEach(button=>button.addEventListener('click',()=>{const d=industries[button.dataset.industry];qsa('[data-industry]').forEach(b=>b.setAttribute('aria-selected',String(b===button)));industryPanel.classList.add('is-switching');setTimeout(()=>{const image=qs('[data-industry-image]');image.src=d.image;image.alt=d.alt;qs('[data-industry-kicker]').textContent=d.kicker;qs('[data-industry-name]').textContent=d.name;qs('[data-industry-title]').textContent=d.title;qs('[data-industry-description]').textContent=d.description;const link=qs('[data-industry-link]');link.href=d.href;link.innerHTML=`Explore ${d.name.toLowerCase()} solutions <span>↗</span>`;qs('[data-industry-cases]').innerHTML=d.groups.map(g=>`<div><strong>${g[0]}</strong><ul>${g.slice(1).map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');industryPanel.classList.remove('is-switching')},180)}));
+const industryPanel=qs('[data-industry-panel]'),industryButtons=qsa('[data-industry]');
+function selectIndustry(button,animate=true){
+ const d=industries[button.dataset.industry];
+ industryButtons.forEach(b=>b.setAttribute('aria-selected',String(b===button)));
+ const update=()=>{const image=qs('[data-industry-image]');image.src=d.image;image.alt=d.alt;qs('[data-industry-kicker]').textContent=d.kicker;qs('[data-industry-name]').textContent=d.name;qs('[data-industry-title]').textContent=d.title;const link=qs('[data-industry-link]');link.href=d.href;link.innerHTML=`Explore ${d.name.toLowerCase()} solutions <span>↗</span>`;qs('[data-industry-cases]').innerHTML=d.groups.map(g=>`<div><strong>${g[0]}</strong><ul>${g.slice(1).map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');industryPanel.classList.remove('is-switching')};
+ if(animate){industryPanel.classList.add('is-switching');setTimeout(update,180)}else update();
+}
+industryButtons.forEach(button=>button.addEventListener('click',()=>selectIndustry(button)));
+selectIndustry(industryButtons.find(button=>button.dataset.industry==='solar'),false);
 
 // Accessible demo dialog with local-only validation and transparent simulated feedback.
 const dialog=qs('.demo-dialog'),form=qs('#demo-form');
